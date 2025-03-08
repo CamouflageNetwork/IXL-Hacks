@@ -14,7 +14,7 @@ function solveProblem() {
     let smartScore = scoreElement ? parseInt(scoreElement.textContent, 10) : 0;
 
     try {
-        let answer = eval(equationText);
+        let answer = safeEval(equationText); // safer eval alternative
         if (window.forceWrongAnswer) {
             answer = 1000;
             window.forceWrongAnswer = false;
@@ -47,6 +47,16 @@ function solveProblem() {
     } catch (e) {
         console.error('Error solving the problem:', e);
         window.forceWrongAnswer = true;
+    }
+}
+
+function safeEval(expression) {
+    // Use a safer eval alternative
+    try {
+        return new Function('return ' + expression)();
+    } catch (e) {
+        console.error('Failed to evaluate the expression:', expression, e);
+        return NaN;
     }
 }
 
