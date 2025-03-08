@@ -1,20 +1,34 @@
-document.getElementById('runButton').addEventListener('click', runcode);
+document.getElementById('runButton').addEventListener('click', function() {
+    console.log('Button clicked!');
+    runcode();
+});
+
+function runcode() {
+    console.log('Running code...');
+    solveProblem();
+}
 
 function solveProblem() {
     const problemBox = document.querySelector('.old-space-indent');
-    if (!problemBox) return;
+    if (!problemBox) {
+        console.log('Problem box not found.');
+        return;
+    }
 
     let equationText = problemBox.textContent.replace(/–/g, '-').replace(/−/g, '-').trim();
     equationText = equationText.replace(/[^\d+\-*/(). ]/g, '').trim();
 
     const inputBox = problemBox.querySelector('input.fillIn');
-    if (!inputBox) return;
+    if (!inputBox) {
+        console.log('Input box not found.');
+        return;
+    }
 
     const scoreElement = document.querySelector('.current-smartscore');
     let smartScore = scoreElement ? parseInt(scoreElement.textContent, 10) : 0;
 
     try {
-        let answer = safeEval(equationText); // safer eval alternative
+        let answer = safeEval(equationText);
         if (window.forceWrongAnswer) {
             answer = 1000;
             window.forceWrongAnswer = false;
@@ -51,7 +65,6 @@ function solveProblem() {
 }
 
 function safeEval(expression) {
-    // Use a safer eval alternative
     try {
         return new Function('return ' + expression)();
     } catch (e) {
